@@ -12,6 +12,9 @@
 
 # Feel free to add below this line. See auditctl man page
 
+<% node['auditd']['additional_lines'].each do |line| %>
+<%= line %>
+<% end %>
 
 # CIS Benchmark Adjustments
 
