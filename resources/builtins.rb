@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: auditd
+# Cookbook:: auditd
 # Resource:: auditd_builtins
 #
-# Copyright 2012, Heavy Water Operations, LLC.
+# Copyright:: 2012-2017, Heavy Water Operations, LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,7 +17,23 @@
 # limitations under the License.
 #
 
-actions :create
-default_action :create
+property :name, String, name_attribute: true
 
-attribute :name, kind_of: String, name_attribute: true
+action :create do
+  extend AuditD::Helper
+
+  case node['platform_family']
+  when 'rhel', 'fedora'
+    # auditd_version = `/sbin/aureport -v`.split(' ').last
+
+    template auditd_rulefile do
+      source "#{new_resource.name}.rules.erb"
+      notifies :restart, 'service[auditd]'
+    end
+  else
+    execute "installing ruleset #{new_resource.name}" do
+      command "zcat /usr/share/doc/auditd/examples/#{new_resource.name}.rules.gz > /etc/audit/audit.rules"
+      notifies :restart, 'service[auditd]'
+    end
+  end
+end

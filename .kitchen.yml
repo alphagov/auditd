@@ -3,12 +3,17 @@ driver:
 
 provisioner:
   name: chef_zero
+  deprecations_as_errors: true
+
+verifier:
+  name: inspec
 
 platforms:
-  - name: centos-6.8
-  - name: centos-7.2
-  - name: ubuntu-12.04
-    run_list: apt::default
+  - name: centos-6
+  - name: centos-7
+  - name: debian-7
+  - name: debian-8
+  - name: fedora-26
   - name: ubuntu-14.04
     run_list: apt::default
   - name: ubuntu-16.04
@@ -17,11 +22,10 @@ platforms:
 suites:
 - name: default
   run_list:
-  - recipe[auditd]
-
-- name: rules
-  run_list:
   - recipe[auditd::rules]
+  verifier:
+    inspec_tests:
+      - test/integration/default
 
 - name: stig-rules
   run_list:
@@ -29,6 +33,9 @@ suites:
   attributes:
     auditd:
       ruleset: "stig"
+  verifier:
+    inspec_tests:
+      - test/integration/stig
 
 - name: capp-rules
   run_list:
@@ -36,3 +43,6 @@ suites:
   attributes:
     auditd:
       ruleset: "capp"
+  verifier:
+    inspec_tests:
+      - test/integration/capp

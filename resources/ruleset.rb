@@ -1,8 +1,8 @@
 #
-# Cookbook Name:: auditd
+# Cookbook:: auditd
 # Resource:: auditd_ruleset
 #
-# Copyright 2012, Heavy Water Operations, LLC.
+# Copyright:: 2012-2017, Heavy Water Operations, LLC.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,15 @@
 # limitations under the License.
 #
 
-actions :create
-default_action :create
+property :name, String, name_attribute: true
+property :cookbook, String
 
-attribute :name, kind_of: String, name_attribute: true
-attribute :cookbook, kind_of: String, default: nil
+action :create do
+  extend AuditD::Helper
+
+  template auditd_rulefile(new_resource.name) do
+    source "#{new_resource.name}.erb"
+    cookbook new_resource.cookbook if new_resource.cookbook
+    notifies :restart, 'service[auditd]'
+  end
+end

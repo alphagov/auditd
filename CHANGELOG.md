@@ -2,16 +2,41 @@
 
 This file is used to list changes made in each version of auditd.
 
+## 2.1.1 (2017-07-13)
 
-## 1.0.1 (2016-10-13)
+- Install "audit" package for Amazon Linux on Chef 13
+
+## 2.1.0 (2017-05-03)
+
+- Add support for RHEL 7
+
+## 2.0.0 (2017-04-26)
+
+- Convert the existing LWRPs to custom resources, which raises the requires chef version to 12.5+
+- Expand testing to cover the custom resources
+- Let Chef can determine the proper restart command instead of hardcoding logic into the recipe
+- Test with local delivery and not Rake
+- Update apache2 license string
+- Update copyrights
+
+## 1.0.3 (2016-10-13) (GOV.UK Pay internal changes)
 
 - Add new array attribute to hold optional additional lines to add into ERB
 - Fix issue where missing system directories on Ubuntu resulted in only half the CIS rulebase to load
 
+## 1.0.2 (2017-01-18)
+
+- Add ChefSpec matchers
+
+## 1.0.1 (2016-11-25)
+
+- Enable use_inline_resources in the LWRPs
+- Run integration testing in Travis
+
 ## 1.0.0 (2016-09-08)
 
 - Testing updates
-- Require Chef 12
+- Require Chef 12.0 or later
 
 ## 0.2.0 (2016-08-11)
 
